@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     var player: AVPlayer?
     var playerViewController: AVPlayerViewController?
     
+    let resourceLoaderDelegate = ResourceLoaderDelegate(accessToken: "79ef7b66-bcac-4129-bfe1-34ca3006e799")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpPlayer()
@@ -24,7 +26,10 @@ class ViewController: UIViewController {
     }
     
     func setUpPlayer(){
-        player = AVPlayer(url: URL(string: AES_ENCRYPTED_VIDEO_URL)!)
+        let asset = AVURLAsset(url: URL(string: AES_ENCRYPTED_VIDEO_URL)!)
+        asset.resourceLoader.setDelegate(resourceLoaderDelegate, queue: DispatchQueue.main)
+        let playerItem = AVPlayerItem(asset: asset)
+        player = AVPlayer(playerItem: playerItem)
         playerViewController = AVPlayerViewController()
         playerViewController?.player = player
 
